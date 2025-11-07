@@ -1,4 +1,4 @@
-import { ApiOperation, ApiResponse } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiOperation, ApiResponse } from '@nestjs/swagger';
 import { CreateTask } from './dto/create-task.dto';
 import { UpdateTask } from './dto/update-task.dto';
 import { Task } from './entities/task.entity';
@@ -11,9 +11,12 @@ import {
   Body,
   Put,
   Delete,
+  UseGuards,
 } from '@nestjs/common';
+import { AuthGuard } from '../auth/guard/auth.guard';
 
 @Controller('api/tasks')
+@ApiBearerAuth()
 export class TasksController {
   constructor(private readonly tasksService: TasksService) {}
 
@@ -43,6 +46,7 @@ export class TasksController {
     return this.tasksService.findOne(+id);
   }
 
+  @UseGuards(AuthGuard)
   @ApiOperation({ summary: 'Create a new task' })
   @ApiResponse({
     status: 201,
@@ -58,6 +62,7 @@ export class TasksController {
     return this.tasksService.create(dto);
   }
 
+  @UseGuards(AuthGuard)
   @ApiOperation({ summary: 'Update a task' })
   @ApiResponse({
     status: 200,
@@ -73,6 +78,7 @@ export class TasksController {
     return this.tasksService.update(+id, dto);
   }
 
+  @UseGuards(AuthGuard)
   @ApiOperation({ summary: 'Delete a task' })
   @ApiResponse({
     status: 200,

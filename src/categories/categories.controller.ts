@@ -7,14 +7,17 @@ import {
   Param,
   Post,
   Put,
+  UseGuards,
 } from '@nestjs/common';
 import { CategoriesService } from './categories.service';
 import { CreateCategory } from './dto/create-category.dto';
-import { ApiOperation, ApiResponse } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiOperation, ApiResponse } from '@nestjs/swagger';
 import { Category } from './entites/category.entity';
 import { UpdateCategory } from './dto/update-category.dto';
+import { AuthGuard } from '../auth/guard/auth.guard';
 
 @Controller('api/categories')
+@ApiBearerAuth()
 export class CategoriesController {
   constructor(private readonly categoriesService: CategoriesService) {}
 
@@ -40,6 +43,7 @@ export class CategoriesController {
     return category;
   }
 
+  @UseGuards(AuthGuard)
   @ApiOperation({ summary: 'Create a new category' })
   @ApiResponse({
     status: 201,
@@ -51,6 +55,7 @@ export class CategoriesController {
     return this.categoriesService.create(createDto.title);
   }
 
+  @UseGuards(AuthGuard)
   @ApiOperation({ summary: 'Update a category' })
   @ApiResponse({
     status: 200,
@@ -66,6 +71,7 @@ export class CategoriesController {
     return category;
   }
 
+  @UseGuards(AuthGuard)
   @ApiOperation({ summary: 'Delete a category' })
   @ApiResponse({
     status: 200,

@@ -7,6 +7,8 @@ import { CategoriesModule } from './categories/categories.module';
 import { TasksModule } from './tasks/tasks.module';
 import { Task } from './tasks/entities/task.entity';
 import { ConfigModule } from '@nestjs/config';
+import { AuthModule } from './auth/auth.module';
+import { User } from './auth/entities/user.entity';
 
 @Module({
   imports: [
@@ -20,11 +22,12 @@ import { ConfigModule } from '@nestjs/config';
       username: process.env.DB_USERNAME ?? 'postgres',
       password: process.env.DB_PASSWORD ?? 'password',
       database: process.env.DB_NAME ?? 'tasks_db',
-      entities: [Category, Task],
+      entities: [Category, Task, User],
       synchronize: true, // auto-create tables (safe for dev only)
     }),
     CategoriesModule,
     TasksModule,
+    AuthModule,
   ],
   controllers: [AppController],
   providers: [AppService],
